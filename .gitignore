@@ -30,6 +30,11 @@ gradlew
 gradlew.bat
 
 settings.gradle
+package.json
+webpack-config.js
+yarn.lock
+node_modules
+gradle
 
 ### NetBeans ###
 /nbproject/private/
