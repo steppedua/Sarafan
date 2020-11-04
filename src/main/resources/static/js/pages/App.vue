@@ -1,13 +1,24 @@
 <template>
-  <div>
-    <div v-if="!profile">Необходимо авторизоваться через
+  <v-app>
+    <v-app-bar app>
+      <v-toolbar>Sarafan</v-toolbar>
+      <v-spacer></v-spacer>
+      <span v-if="profile">{{ profile.name }}</span>
+      <v-btn v-if="profile" href="/logout" text>
+        <v-icon>exit_to_app</v-icon>
+      </v-btn>
+    </v-app-bar>
+    <v-main>
+
+    </v-main>
+    <v-container v-if="!profile">
+      Необходимо авторизоваться через
       <a href="/login">Google</a>
-    </div>
-    <div v-else>
-      <div>{{ profile.name }}&nbsp;<a href="/logout">Выйти</a></div>
+    </v-container>
+    <v-container v-if="profile">
       <messages-list :messages="messages"/>
-    </div>
-  </div>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
