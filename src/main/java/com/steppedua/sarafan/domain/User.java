@@ -1,6 +1,7 @@
 package com.steppedua.sarafan.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -17,8 +18,11 @@ public class User implements Serializable {
     private static final long serialVersionUID = -3647197254860304641L;
 
     @Id
+    @JsonView(Views.IdName.class)
     private String id;
+    @JsonView(Views.IdName.class)
     private String name;
+    @JsonView(Views.IdName.class)
     private String userpic;
     private String email;
     private String gender;
