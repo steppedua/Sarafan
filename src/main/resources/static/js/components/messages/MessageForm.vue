@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       text: '',
-      id: ''
+      id: null
     }
   },
   watch: {
@@ -37,17 +37,12 @@ export default {
         text: this.text
       }
       if (this.id) {
-        this.updateMessageAction({
-          id: this.id,
-          text: this.text
-        });
+        this.updateMessageAction(message)
       } else {
-        this.addMessageAction({
-          text: this.text
-        });
+        this.addMessageAction(message);
       }
       this.text = ''
-      this.id = ''
+      this.id = null
     }
   }
 }

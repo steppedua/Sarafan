@@ -1,22 +1,22 @@
 package com.steppedua.sarafan.domain;
 
 import com.fasterxml.jackson.annotation.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "msg")
+@Table
+@ToString(of = {"id", "text"})
+@EqualsAndHashCode(of = {"id"})
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id"
+        property = "id",
+        generator = ObjectIdGenerators.PropertyGenerator.class
 )
 public class Message {
     @Id

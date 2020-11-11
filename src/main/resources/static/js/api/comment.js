@@ -1,7 +1,7 @@
-import Vue from "vue"
+import Vue from 'vue'
 
 const comments = Vue.resource('/comment{/id}')
 
 export default {
-    add: comment => comments.save({}, comment)
+    add: comment => comments.save({}, comment),
 }

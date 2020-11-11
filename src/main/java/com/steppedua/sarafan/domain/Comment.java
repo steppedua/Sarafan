@@ -9,10 +9,10 @@ import javax.persistence.*;
 @Entity
 @Table
 @Data
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = { "id" })
 public class Comment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue
     @JsonView(Views.IdName.class)
     private Long id;
 

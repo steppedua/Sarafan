@@ -5,9 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.steppedua.sarafan.domain.User;
 import com.steppedua.sarafan.domain.Views;
-import com.steppedua.sarafan.repository.MessageRepository;
+import com.steppedua.sarafan.dto.MessagePageDto;
+import com.steppedua.sarafan.repository.UserDetailsRepository;
+import com.steppedua.sarafan.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,37 +19,58 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/")
 public class MainController {
-    private final MessageRepository messageRepository;
+    private final MessageService messageService;
+    private final UserDetailsRepository userDetailsRepository;
 
     @Value("${spring.profile.active}")
     private String profile;
-    private final ObjectWriter writer;
+    private final ObjectWriter messageWriter;
+    private final ObjectWriter profileWriter;
 
     @Autowired
-    public MainController(MessageRepository messageRepository, ObjectMapper mapper) {
-        this.messageRepository = messageRepository;
+    public MainController(MessageService messageService, UserDetailsRepository userDetailsRepository, ObjectMapper mapper) {
+        this.messageService = messageService;
+        this.userDetailsRepository = userDetailsRepository;
 
-        this.writer = mapper
-                .setConfig(mapper.getSerializationConfig())
+        ObjectMapper objectMapper = mapper
+                .setConfig(mapper.getSerializationConfig());
+
+        this.messageWriter = objectMapper
                 .writerWithView(Views.FullMessage.class);
+
+        this.profileWriter = objectMapper
+                .writerWithView(Views.FullProfile.class);
     }
 
     @GetMapping
-    public String main(Model model, @AuthenticationPrincipal User user) throws JsonProcessingException {
+    public String main(
+            Model model,
+            @AuthenticationPrincipal User user
+    ) throws JsonProcessingException {
         HashMap<Object, Object> data = new HashMap<>();
 
         if (user != null) {
-            data.put("profile", user);
+            User userFromDb = userDetailsRepository.findById(user.getId()).get();
+            String serializedProfile = profileWriter.writeValueAsString(userFromDb);
+            model.addAttribute("profile", serializedProfile);
 
-            String messages = writer.writeValueAsString(messageRepository.findAll());
+            Sort sort = Sort.by(Sort.Direction.DESC, "id");
+            PageRequest pageRequest = PageRequest.of(0, MessageController.MESSAGES_PER_PAGE, sort);
+            MessagePageDto messagePageDto = messageService.findAll(pageRequest);
+
+            String messages = messageWriter.writeValueAsString(messagePageDto.getMessages());
 
             model.addAttribute("messages", messages);
+            data.put("currentPage", messagePageDto.getCurrentPage());
+            data.put("totalPages", messagePageDto.getTotalPages());
         } else {
             model.addAttribute("messages", "[]");
+            model.addAttribute("profile", "null");
         }
 
         model.addAttribute("frontendData", data);

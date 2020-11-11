@@ -24,12 +24,11 @@
 </template>
 
 <script>
-import YouTube from "components/media/YouTube.vue";
+import YouTube from 'components/media/YouTube.vue'
 
 export default {
-  name: "Media",
+  name: 'Media',
   components: {YouTube},
-  comments: {YouTube},
   props: ['message'],
   data() {
     return {
