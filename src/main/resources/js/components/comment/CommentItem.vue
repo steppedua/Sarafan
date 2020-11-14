@@ -11,13 +11,13 @@
 </template>
 
 <script>
-import UserLink from "components/UserLink.vue";
+import UserLink from '../UserLink.vue'
 
-export default {
-  name: 'CommentItem',
-  components: {UserLink},
-  props: ['comment']
-}
+    export default {
+        name: 'CommentItem',
+        components: {UserLink},
+        props: ['comment']
+    }
 </script>
 
 <style scoped>

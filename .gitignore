@@ -35,6 +35,8 @@ yarn.lock
 node_modules
 gradle
 
+/src/main/resources/static/js/
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

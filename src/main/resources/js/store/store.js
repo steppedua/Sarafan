@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import messagesApi from 'api/messages'
-import commentApi from 'api/comment'
+import messagesApi from '../api/messages'
+import commentApi from '../api/comment'
 
 Vue.use(Vuex)
 
@@ -44,12 +44,15 @@ export default new Vuex.Store({
             const updateIndex = state.messages.findIndex(item => item.id === comment.message.id)
             const message = state.messages[updateIndex]
 
-            if (!(message.comments || []).find(it => it.id === comment.id)) {
+            if (!message.comments.find(it => it.id === comment.id)) {
                 state.messages = [
                     ...state.messages.slice(0, updateIndex),
                     {
                         ...message,
-                        comments: message.comments === null ? [comment] : [...message.comments, comment]
+                        comments: [
+                            ...message.comments,
+                            comment
+                        ]
                     },
                     ...state.messages.slice(updateIndex + 1)
                 ]

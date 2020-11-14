@@ -14,7 +14,17 @@
               <v-flex>{{ profile.gender }}</v-flex>
               <v-flex>{{ profile.lastVisit }}</v-flex>
               <v-flex>{{ profile.subscriptions && profile.subscriptions.length }} subscriptions</v-flex>
-              <v-flex>{{ profile.subscribers && profile.subscribers.length }} subscribers</v-flex>
+              <router-link
+                  v-if="isMyProfile"
+                  :to="`/subscriptions/${profile.id}`"
+              >
+                {{ profile.subscribers && profile.subscribers.length }} subscribers
+              </router-link>
+              <v-flex
+                  v-else
+              >
+                {{ profile.subscribers && profile.subscribers.length }} subscribers
+              </v-flex>
             </v-layout>
           </v-flex>
         </v-layout>
@@ -22,7 +32,7 @@
             v-if="!isMyProfile"
             @click="changeSubscription"
         >
-          {{ isSubscribed ? "Unsubscribe" : "Subscribe" }}
+          {{ isSubscribed ? 'Unsubscribe' : 'Subscribe' }}
         </v-btn>
       </v-flex>
     </v-layout>
@@ -30,10 +40,10 @@
 </template>
 
 <script>
-import profileApi from "api/profile";
+import profileApi from '../api/profile'
 
 export default {
-  name: "Profile",
+  name: 'Profile',
   data() {
     return {
       profile: {}
@@ -47,7 +57,7 @@ export default {
     isSubscribed() {
       return this.profile.subscribers &&
           this.profile.subscribers.find(subscription => {
-            return subscription.id === this.$store.state.profile.id
+            return subscription.subscriber === this.$store.state.profile.id
           })
     }
   },

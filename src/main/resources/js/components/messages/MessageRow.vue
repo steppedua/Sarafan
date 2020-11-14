@@ -24,10 +24,10 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex'
-import Media from 'components/media/Media.vue'
+import { mapActions } from 'vuex'
+import Media from '../media/Media.vue'
 import CommentList from '../comment/CommentList.vue'
-import UserLink from "components/UserLink.vue";
+import UserLink from '../UserLink.vue'
 
 export default {
   props: ['message', 'editMessage'],
